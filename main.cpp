@@ -17,13 +17,16 @@ public:
     void readImage(const string& file_name);
     void copyImage(const Image& base_image);
     void writeImage(const string& file_name);
+
+    void posterization();
 };
 
 int main(int argc, char* argv[]) {
     Image img;
 
     img.readImage("../SIDBA_Gray/LENNA.jpg");
-    img.writeImage("../LENNA_result.jpg");
+    img.posterization();
+    img.writeImage("../result/LENNA_result.jpg");
 
     return 0;
 }
@@ -80,4 +83,19 @@ void Image::writeImage(const string& file_name) {
     cv::imwrite(file_name, img);
 
     cout << "Write : " << file_name << endl;
+}
+
+void Image::posterization() {
+    // number of steps to split
+    int steps;  cout << "number of steps :", cin >> steps;
+    // number included in one step
+    int diff = 256 / steps;
+
+    // change pixel values
+    for (int height = 0; height < img_height; ++height) {
+        for (int width = 0; width < img_width; ++width) {
+            double step = (pix_val[height][width] / 256.) * steps;
+            pix_val[height][width] = (uchar)step * diff;
+        }
+    }
 }
