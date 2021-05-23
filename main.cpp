@@ -20,11 +20,10 @@ public:
 };
 
 int main(int argc, char* argv[]) {
-    Image input_img, output_img;
+    Image img;
 
-    input_img.readImage("../SIDBA_Gray/LENNA.jpg");
-    output_img.copyImage(input_img);
-    output_img.writeImage("../LENNA_result.jpg");
+    img.readImage("../SIDBA_Gray/LENNA.jpg");
+    img.writeImage("../LENNA_result.jpg");
 
     return 0;
 }
@@ -80,5 +79,5 @@ void Image::writeImage(const string& file_name) {
     // write image
     cv::imwrite(file_name, img);
 
-    std::cout << "Write : " << file_name << std::endl;
+    cout << "Write : " << file_name << endl;
 }
