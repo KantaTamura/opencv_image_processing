@@ -20,13 +20,14 @@ public:
 
     void posterization();
     void changeLinear();
+    void gammaTransformation();
 };
 
 int main(int argc, char* argv[]) {
     Image img;
 
     img.readImage("../SIDBA_Gray/LENNA.jpg");
-    img.changeLinear();
+    img.gammaTransformation();
     img.writeImage("../result/LENNA_result.jpg");
 
     return 0;
@@ -120,6 +121,17 @@ void Image::changeLinear() {
                 double formula = 255. / (max - min) * (pix_val[height][width] - min);
                 pix_val[height][width] = (uchar)formula;
             }
+        }
+    }
+}
+
+void Image::gammaTransformation() {
+    double gamma;
+    cout << "number of gamma :", cin >> gamma;
+    for (int height = 0; height < img_height; ++height) {
+        for (int width = 0; width < img_width; ++width) {
+            double formula = 255. * pow(pix_val[height][width] / 255., 1 / gamma);
+            pix_val[height][width] = (uchar)formula;
         }
     }
 }
