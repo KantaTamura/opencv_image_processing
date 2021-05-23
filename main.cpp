@@ -23,6 +23,7 @@ public:
     Image gammaTransformation();
 
     Image filterOperation();
+    Image medianFilter();
 
     Image makeHistogram(const string& file_name);
 };
@@ -31,10 +32,10 @@ int main(int argc, char* argv[]) {
     Image image;
 
     image
-        .readImage("../SIDBA_Gray/LENNA.jpg")
+        .readImage("../SIDBA_Gray/House1.jpg")
         .filterOperation()
-        .writeImage("../result/LENNA_filter.jpg")
-        .makeHistogram("../result/LENNA_filter_histogram.jpg");
+        .writeImage("../result/House1_median.jpg")
+        .makeHistogram("../result/House1_median_histogram.jpg");
 
     return 0;
 }
@@ -199,6 +200,33 @@ Image Image::filterOperation() {
                 double formula = (buf_pix_val[height][width] - min) * 255. / (max - min);
                 pix_val[height][width] = (uchar)formula;
             }
+        }
+    }
+
+    return *this;
+}
+
+Image Image::medianFilter() {
+    vector< vector< uchar > > buf_pix_val(img_height, vector<uchar>(img_width));
+
+    // select median
+    for (int height = 1; height < img_height - 1; ++height) {
+        for (int width = 1; width < img_width - 1; ++width) {
+            vector<uchar> val;
+            for (int i = -1; i <= 1; ++i) {
+                for (int j = -1; j <= 1; ++j) {
+                    val.push_back(pix_val[height + i][width + j]);
+                }
+            }
+            sort(val.begin(), val.end());
+            buf_pix_val[height][width] = val[4];
+        }
+    }
+
+    // update pixel values
+    for (int height = 1; height < img_height - 1; ++height) {
+        for (int width = 1; width < img_width - 1; ++width) {
+            pix_val[height][width] = buf_pix_val[height][width];
         }
     }
 
