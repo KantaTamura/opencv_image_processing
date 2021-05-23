@@ -22,17 +22,19 @@ public:
     Image changeLinear();
     Image gammaTransformation();
 
-    Image makeHistogram();
+    Image filterOperation();
+
+    Image makeHistogram(const string& file_name);
 };
 
 int main(int argc, char* argv[]) {
-    Image img;
+    Image image;
 
-    img
+    image
         .readImage("../SIDBA_Gray/LENNA.jpg")
-        .gammaTransformation()
-        .writeImage("../result/LENNA_result.jpg")
-        .makeHistogram();
+        .filterOperation()
+        .writeImage("../result/LENNA_filter.jpg")
+        .makeHistogram("../result/LENNA_filter_histogram.jpg");
 
     return 0;
 }
@@ -152,7 +154,58 @@ Image Image::gammaTransformation() {
     return *this;
 }
 
-Image Image::makeHistogram() {
+Image Image::filterOperation() {
+    // define operation
+    const int op[3][3] = {
+            { 2, -2,  2},
+            {-2,  4, -2},
+            { 2, -2,  2},
+    };
+
+    // buffer pixel values
+    vector< vector< int > > buf_pix_val(img_height, vector<int>(img_width, 0));
+
+    // calculate operation
+    for (int height = 0; height < img_height; ++height) {
+        for (int width = 0; width < img_width; ++width) {
+            int sum = 0;
+            for (int i = 0; i < 3; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    if (height + (i - 1) < 0 || height + (i - 1) >= img_height
+                        || width + (j - 1) < 0 || width + (j - 1) >= img_width)
+                        continue;
+                    sum += pix_val[height + (i - 1)][width + (j - 1)] * op[i][j];
+                }
+            }
+            buf_pix_val[height][width] = sum;
+        }
+    }
+
+    // search max(min) value
+    int max = std::numeric_limits<int>::min(), min = std::numeric_limits<int>::max();
+    for (int height = 0; height < img_height; ++height) {
+        for (int width = 0; width < img_width; ++width) {
+            if (buf_pix_val[height][width] > max) max = buf_pix_val[height][width];
+            if (buf_pix_val[height][width] < min) min = buf_pix_val[height][width];
+        }
+    }
+
+    // change 256 steps
+    for (int height = 0; height < img_height; ++height) {
+        for (int width = 0; width < img_width; ++width) {
+            if (buf_pix_val[height][width] < min) buf_pix_val[height][width] = 0;
+            else if (buf_pix_val[height][width] > max) buf_pix_val[height][width] = 255;
+            else {
+                double formula = (buf_pix_val[height][width] - min) * 255. / (max - min);
+                pix_val[height][width] = (uchar)formula;
+            }
+        }
+    }
+
+    return *this;
+}
+
+Image Image::makeHistogram(const string& file_name) {
     // calc histogram
     vector<double> histogram_values(256, 0);
     for (int height = 0; height < img_height; ++height) {
@@ -201,7 +254,7 @@ Image Image::makeHistogram() {
                  cv::Scalar(50,50,50), 1, 8, 0);
     }
 
-    cv::imwrite("../result/histogram.jpg", image_histogram);
+    cv::imwrite(file_name, image_histogram);
 
     return *this;
 }
