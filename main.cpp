@@ -35,8 +35,6 @@ void Image::readImage(const string& file_name) {
     if (img.empty()) {
         cerr << "Failed to open image file : " << file_name << endl;
         exit(EXIT_FAILURE);
-    } else {
-        cout << "Read success : " << file_name << endl;
     }
 
     // save image pixel size
@@ -49,6 +47,8 @@ void Image::readImage(const string& file_name) {
             pix_val[height][width] = img.data[img_width * height + width];
         }
     }
+
+    cout << "Read success : " << file_name << endl;
 }
 
 void Image::copyImage(const Image& base_image) {
@@ -58,14 +58,14 @@ void Image::copyImage(const Image& base_image) {
     if (img.empty()) {
         cerr << "Failed to copy image file" << endl;
         exit(EXIT_FAILURE);
-    } else {
-        cout << "Copy success" << endl;
     }
 
     img_height = base_image.img_height; img_width = base_image.img_width;
 
     // copy image pixel values
     pix_val = base_image.pix_val;
+
+    cout << "Copy success" << endl;
 }
 
 void Image::writeImage(const string& file_name) {
