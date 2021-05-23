@@ -14,30 +14,30 @@ class Image {
 
 public:
     Image() = default;
-    void readImage(const string& file_name);
-    void copyImage(const Image& base_image);
-    void writeImage(const string& file_name);
+    Image readImage(const string& file_name);
+    Image copyImage(const Image& base_image);
+    Image writeImage(const string& file_name);
 
-    void posterization();
-    void changeLinear();
-    void gammaTransformation();
+    Image posterization();
+    Image changeLinear();
+    Image gammaTransformation();
 
-    void makeHistogram();
+    Image makeHistogram();
 };
 
 int main(int argc, char* argv[]) {
     Image img;
 
-    img.readImage("../SIDBA_Gray/LENNA.jpg");
-    img.gammaTransformation();
-    img.writeImage("../result/LENNA_result.jpg");
-
-    img.makeHistogram();
+    img
+        .readImage("../SIDBA_Gray/LENNA.jpg")
+        .gammaTransformation()
+        .writeImage("../result/LENNA_result.jpg")
+        .makeHistogram();
 
     return 0;
 }
 
-void Image::readImage(const string& file_name) {
+Image Image::readImage(const string& file_name) {
     // read grayscale image
     img = cv::imread(file_name, cv::IMREAD_GRAYSCALE);
     // error handling
@@ -58,9 +58,11 @@ void Image::readImage(const string& file_name) {
     }
 
     cout << "Read success : " << file_name << endl;
+
+    return *this;
 }
 
-void Image::copyImage(const Image& base_image) {
+Image Image::copyImage(const Image& base_image) {
     // copy image data
     img = base_image.img.clone();
     // error handling
@@ -75,9 +77,11 @@ void Image::copyImage(const Image& base_image) {
     pix_val = base_image.pix_val;
 
     cout << "Copy success" << endl;
+
+    return *this;
 }
 
-void Image::writeImage(const string& file_name) {
+Image Image::writeImage(const string& file_name) {
     // load pixel values
     for (int height = 0; height < img_height; ++height) {
         for (int width = 0; width < img_width; ++width) {
@@ -89,9 +93,11 @@ void Image::writeImage(const string& file_name) {
     cv::imwrite(file_name, img);
 
     cout << "Write : " << file_name << endl;
+
+    return *this;
 }
 
-void Image::posterization() {
+Image Image::posterization() {
     // number of steps to split
     int steps;  cout << "number of steps :", cin >> steps;
     // number included in one step
@@ -104,9 +110,11 @@ void Image::posterization() {
             pix_val[height][width] = (uchar)step * diff;
         }
     }
+
+    return *this;
 }
 
-void Image::changeLinear() {
+Image Image::changeLinear() {
     // get max(min) values
     uchar max = -1, min = 255;
     for (int height = 0; height < img_height; ++height) {
@@ -127,9 +135,11 @@ void Image::changeLinear() {
             }
         }
     }
+
+    return *this;
 }
 
-void Image::gammaTransformation() {
+Image Image::gammaTransformation() {
     double gamma;
     cout << "number of gamma :", cin >> gamma;
     for (int height = 0; height < img_height; ++height) {
@@ -138,9 +148,11 @@ void Image::gammaTransformation() {
             pix_val[height][width] = (uchar)formula;
         }
     }
+
+    return *this;
 }
 
-void Image::makeHistogram() {
+Image Image::makeHistogram() {
     // calc histogram
     vector<double> histogram_values(256, 0);
     for (int height = 0; height < img_height; ++height) {
@@ -190,4 +202,6 @@ void Image::makeHistogram() {
     }
 
     cv::imwrite("../result/histogram.jpg", image_histogram);
+
+    return *this;
 }
