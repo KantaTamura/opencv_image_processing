@@ -21,6 +21,8 @@ public:
     void posterization();
     void changeLinear();
     void gammaTransformation();
+
+    void calcHistogram();
 };
 
 int main(int argc, char* argv[]) {
@@ -29,6 +31,8 @@ int main(int argc, char* argv[]) {
     img.readImage("../SIDBA_Gray/LENNA.jpg");
     img.gammaTransformation();
     img.writeImage("../result/LENNA_result.jpg");
+
+    img.calcHistogram();
 
     return 0;
 }
@@ -133,5 +137,18 @@ void Image::gammaTransformation() {
             double formula = 255. * pow(pix_val[height][width] / 255., 1 / gamma);
             pix_val[height][width] = (uchar)formula;
         }
+    }
+}
+
+void Image::calcHistogram() {
+    vector<int> histogram(256, 0);
+    for (int height = 0; height < img_height; ++height) {
+        for (int width = 0; width < img_width; ++width) {
+            histogram[pix_val[height][width]] += 1;
+        }
+    }
+
+    for (auto num : histogram) {
+        cout << num << endl;
     }
 }
