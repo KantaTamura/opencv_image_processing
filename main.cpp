@@ -19,13 +19,14 @@ public:
     void writeImage(const string& file_name);
 
     void posterization();
+    void changeLinear();
 };
 
 int main(int argc, char* argv[]) {
     Image img;
 
     img.readImage("../SIDBA_Gray/LENNA.jpg");
-    img.posterization();
+    img.changeLinear();
     img.writeImage("../result/LENNA_result.jpg");
 
     return 0;
@@ -96,6 +97,29 @@ void Image::posterization() {
         for (int width = 0; width < img_width; ++width) {
             double step = (pix_val[height][width] / 256.) * steps;
             pix_val[height][width] = (uchar)step * diff;
+        }
+    }
+}
+
+void Image::changeLinear() {
+    // get max(min) values
+    uchar max = -1, min = 255;
+    for (int height = 0; height < img_height; ++height) {
+        for (int width = 0; width < img_width; ++width) {
+            if (pix_val[height][width] > max) max = pix_val[height][width];
+            if (pix_val[height][width] < min) min = pix_val[height][width];
+        }
+    }
+
+    // change pixel values
+    for (int height = 0; height < img_height; ++height) {
+        for (int width = 0; width < img_width; ++width) {
+            if (pix_val[height][width] < min) pix_val[height][width] = 0;
+            else if (pix_val[height][width] > max) pix_val[height][width] = 255;
+            else {
+                double formula = 255. / (max - min) * (pix_val[height][width] - min);
+                pix_val[height][width] = (uchar)formula;
+            }
         }
     }
 }
