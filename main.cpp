@@ -5,10 +5,11 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+typedef unsigned char uchar;
 
 class Image {
     cv::Mat img;
-    vector< vector< unsigned char > > pix_val;
+    vector< vector< uchar > > pix_val;
     int img_height{}, img_width{};
 
 public:
@@ -41,7 +42,7 @@ void Image::readImage(const string& file_name) {
     img_height = img.size().height; img_width = img.size().width;
 
     // save image pixel values
-    pix_val.resize(img_height, vector<unsigned char>(img_width));
+    pix_val.resize(img_height, vector<uchar>(img_width));
     for (int height = 0; height < img_height; ++height) {
         for (int width = 0; width < img_width; ++width) {
             pix_val[height][width] = img.data[img_width * height + width];
