@@ -15,17 +15,18 @@ class Image {
 
 public:
     Image() = default;
+    // imageIO.cpp
     Image readImage(const std::string& file_name);
     Image copyImage(const Image& base_image);
     Image writeImage(const std::string& file_name);
-
+    // transformation.cpp
     Image posterization();
     Image changeLinear();
     Image gammaTransformation();
-
+    // filter.cpp
     Image filterOperation();
     Image medianFilter();
-
+    // histogram.cpp
     Image makeHistogram(const std::string& file_name);
 };
 
