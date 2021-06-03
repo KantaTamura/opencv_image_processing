@@ -1,4 +1,4 @@
-#include "image.h"
+#include "../lib/image.h"
 
 Image Image::readImage(const std::string& file_name) {
     // read grayscale image

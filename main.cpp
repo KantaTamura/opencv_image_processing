@@ -1,4 +1,4 @@
-#include "src/image.h"
+#include "lib/image.h"
 Image image;
 
 int main(int argc, char* argv[]) {

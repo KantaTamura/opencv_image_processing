@@ -30,4 +30,4 @@ public:
     Image makeHistogram(const std::string& file_name);
 };
 
-#endif // _IMAGE_H
+#endif // IMAGE_H

@@ -1,4 +1,4 @@
-#include "image.h"
+#include "../lib/image.h"
 
 Image Image::filterOperation() {
     // define operation
