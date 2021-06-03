@@ -3,8 +3,10 @@ Image image;
 
 int main(int argc, char* argv[]) {
     image
-        .readImage("../SIDBA_Gray/House1.jpg")
-        .filterOperation()
-        .writeImage("../result/House1_median.jpg")
-        .makeHistogram("../result/House1_median_histogram.jpg");
+        .readImage("../SIDBA_Gray/LENNA.jpg")
+        .writeImage("../result/LENNA_original.jpg")
+        .makeHistogram("../result/histogram/LENNA_histogram_original.jpg")
+        .binarization()
+        .writeImage("../result/LENNA_bin_128.jpg")
+        .makeHistogram("../result/histogram/LENNA_histogram_bin_128.jpg");
 }
