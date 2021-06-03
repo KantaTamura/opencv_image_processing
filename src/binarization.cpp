@@ -1,4 +1,4 @@
-#include "image.h"
+#include "../lib/image.h"
 
 Image Image::binarization() {
     int threshold;  std::cout << "Number of threshold:", std::cin >> threshold;

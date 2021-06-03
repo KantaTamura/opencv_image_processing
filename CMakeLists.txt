@@ -10,4 +10,4 @@ add_subdirectory(src)
 
 add_executable( cv_img_proc main.cpp )
 
-target_link_libraries( cv_img_proc sources ${OpenCV_LIBS} )
+target_link_libraries( cv_img_proc filter histogram imageio transformation binarization ${OpenCV_LIBS} )
