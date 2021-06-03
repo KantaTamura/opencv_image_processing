@@ -17,11 +17,6 @@ Image Image::makeHistogram(const std::string& file_name) {
         value /= max_histogram_value;
     }
 
-    // print normalized histogram values
-    //    for (auto value : histogram_values) {
-    //        std::cout << value << std::endl;
-    //    }
-
     // output histogram image
     cv::Mat image_histogram;
 
@@ -34,10 +29,6 @@ Image Image::makeHistogram(const std::string& file_name) {
 
     // draw histogram
     for (int i = 0; i <= 255; ++i) {
-        line(image_histogram, cv::Point(10 + i, 100),
-             cv::Point(10 + i, 100 - (int)(histogram_values[i] * 80)),
-             cv::Scalar(98,169,255), 1, 8, 0);
-
         // additional line (spacing 10)
         if (i % 10 == 0)
             line(image_histogram, cv::Point(10+i, 100), cv::Point(10+i, 10),
@@ -47,6 +38,10 @@ Image Image::makeHistogram(const std::string& file_name) {
         if (i % 50 == 0)
             line(image_histogram, cv::Point(10+i, 100), cv::Point(10+i, 10),
                  cv::Scalar(50,50,50), 1, 8, 0);
+
+        line(image_histogram, cv::Point(10 + i, 100),
+             cv::Point(10 + i, 100 - (int)(histogram_values[i] * 80)),
+             cv::Scalar(98,169,255), 1, 8, 0);
     }
 
     cv::imwrite(file_name, image_histogram);
