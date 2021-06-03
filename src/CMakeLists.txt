@@ -5,6 +5,7 @@ add_library(
         histogram.cpp
         imageIO.cpp
         transformation.cpp
+        binarization.cpp
 )
 
 target_include_directories(

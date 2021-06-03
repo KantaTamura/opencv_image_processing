@@ -26,6 +26,12 @@ public:
     // filter.cpp
     Image filterOperation();
     Image medianFilter();
+    // binarization.cpp
+    Image binarization();
+    Image p_tail();
+    Image discriminant();
+    Image expantion();
+    Image contraction();
     // histogram.cpp
     Image makeHistogram(const std::string& file_name);
 };
