@@ -75,10 +75,54 @@ Image Image::discriminant() {
     return this->binarization(threshold_result);
 }
 
-Image Image::expantion() {
+Image Image::contraction() {
+    std::vector< std::vector< bool > > buf_pix_val(img_height, std::vector<bool>(img_width, false));
 
+    for (int height = 1; height < img_height - 1; ++height) {
+        for (int width = 1; width < img_width - 1; ++width) {
+            if (pix_val[height][width] == 0) {
+                if (pix_val[height - 1][width] > 1 ||
+                    pix_val[height + 1][width] > 1 ||
+                    pix_val[height][width - 1] > 1 ||
+                    pix_val[height][width + 1] > 1)
+                    buf_pix_val[height][width] = true;
+            }
+        }
+    }
+
+    for (int height = 1; height < img_height - 1; ++height) {
+        for (int width = 1; width < img_width - 1; ++width) {
+            if (buf_pix_val[height][width]) {
+                pix_val[height][width] = 255;
+            }
+        }
+    }
+
+    return *this;
 }
 
-Image Image::contraction() {
+Image Image::expantion() {
+    std::vector< std::vector< bool > > buf_pix_val(img_height, std::vector<bool>(img_width, false));
 
+    for (int height = 1; height < img_height - 1; ++height) {
+        for (int width = 1; width < img_width - 1; ++width) {
+            if (pix_val[height][width] > 1) {
+                if (pix_val[height - 1][width] == 0 ||
+                    pix_val[height + 1][width] == 0 ||
+                    pix_val[height][width - 1] == 0 ||
+                    pix_val[height][width + 1] == 0)
+                    buf_pix_val[height][width] = true;
+            }
+        }
+    }
+
+    for (int height = 1; height < img_height - 1; ++height) {
+        for (int width = 1; width < img_width - 1; ++width) {
+            if (buf_pix_val[height][width]) {
+                pix_val[height][width] = 0;
+            }
+        }
+    }
+
+    return *this;
 }
