@@ -1,8 +1,6 @@
 #include "../lib/image.h"
 
-Image Image::binarization() {
-    int threshold;  std::cout << "Number of threshold:", std::cin >> threshold;
-
+Image Image::binarization(int threshold) {
     for (int height = 0; height < img_height; ++height) {
         for (int width = 0; width < img_width; ++width) {
             if (pix_val[height][width] < threshold)

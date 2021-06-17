@@ -27,7 +27,7 @@ public:
     Image filterOperation();
     Image medianFilter();
     // binarization.cpp
-    Image binarization();
+    Image binarization(int threshold);
     Image p_tail();
     Image discriminant();
     Image expantion();
