@@ -2,7 +2,7 @@
 Image image;
 
 int main(int argc, char* argv[]) {
-    std::string input_img_name = "BRIDGE", output_img_name = "p_tail_";
+    std::string input_img_name = "Tree", output_img_name = "p_tail_30";
     image
         .readImage("../SIDBA_Gray/" + input_img_name + ".jpg")
         .writeImage("../result/" + input_img_name + "_original.jpg")
